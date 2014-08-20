@@ -1,7 +1,7 @@
 ## name of project
 ### Code Badges
-build status icon
-coverage status icon
+[![Build Status](https://travis-ci.org/bchiatt/treasure-map2.svg)](https://travis-ci.org/bchiatt/treasure-map2)
+[![Coverage Status](https://coveralls.io/repos/bchiatt/treasure-map2/badge.png)](https://coveralls.io/r/bchiatt/treasure-map2)
 
 ### About
 write a description about your project
