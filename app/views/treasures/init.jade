@@ -1,0 +1,41 @@
+extends ../shared/template
+block content
+  h2 New Treasure
+  .panel.panel-default
+    .panel-body
+      .row-fluid
+        form.form#treasure-form(method='post', action='/treasures/new', name='treasure-form', role='form', enctype='multipart/form-data')
+          .col-xs-6
+            .form-group
+              label(for='name') Treasure Name
+              input.form-control#name(type='text', placeholder='treasure name', name='name', autofocus='true')
+            .form-group
+              label(for='loc') Location Name
+              input.form-control#loc(type='text', placeholder='location name', name='loc', data-loc='name')
+              input#lat(type='hidden', name='loc', data-loc='lat')
+              input#lng(type='hidden', name='loc', data-loc='lng')
+            .form-group
+              label(for='diff') Difficulty Level
+              select.form-control#diff(type='select', name='diff')
+                option(value='1') Easy
+                option(value='1') Medium
+                option(value='1') Hard
+            .form-group
+              label(for='order') Order
+              input.form-control#order(type='number', name='order')
+          .col-xs-6
+            .form-group
+              label(for='photos') Upload Photos
+              input.form-control#photos(type='file', name='photos', multiple=true)
+            .form-group#hints
+              label(for='hint') Hints
+              span.button.btn.btn-xs.btn-success#addHint(type='button') Add
+              input.form-control#hint(type='text', name='hints', placeholder='hint')
+            .form-group
+              label(for='tags') Tags
+              input.form-control#tags(type='text', name='tags')
+            button.btn.btn-primary(type='submit') Save!
+
+block scripts
+  script(src='/js/user/new-treasure.js')
+

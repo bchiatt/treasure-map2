@@ -60,7 +60,7 @@ Treasure.prototype.uploadPhoto = function(files, cb){
     self.photos.push(rel);
   });
 
-  Treasure.collection.update(self, cb);
+  Treasure.collection.update({id:self._id}, {$set:{photos:self.photos}}, cb);
 
 };
 
