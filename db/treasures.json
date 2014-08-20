@@ -1,0 +1,36 @@
+{
+  "_id":{"$oid":"000000000000000000000001"},
+  "name":"money",
+  "loc":{"name":"London", "lat":21.2396, "lng":-22.9603},
+  "order":1,
+  "diff":3,
+  "hints":['do this', 'then that', 'then this'],
+  "photos":['img1', 'img2', 'img3'],
+  "tags":['tag1', 'tag2', 'tag3'],
+  "isFound":false
+}
+
+{
+  "_id":{"$oid":"000000000000000000000002"},
+  "name":"fame",
+  "loc":{"name":"New York", "lat":61.3932, "lng":92.4829},
+  "order":2,
+  "diff":1,
+  "hints":['walk', 'stumble', 'crawl'],
+  "photos":['img4', 'img5', 'img6'],
+  "tags":['tag4', 'tag5', 'tag6'],
+  "isFound":false
+}
+
+{
+  "_id":{"$oid":"000000000000000000000003"},
+  "name":"power",
+  "loc":{"name":"Tokyo", "lat":21, "lng":22},
+  "order":3,
+  "diff":2,
+  "hints":['crack egg', 'scramble', 'cook'],
+  "photos":['img7', 'img8', 'img9'],
+  "tags":['tag7', 'tag8', 'tag9'],
+  "isFound":false
+}
+
