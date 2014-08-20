@@ -5,7 +5,7 @@
 
 var expect    = require('chai').expect,
     Treasure  = require('../../app/models/treasure'),
-    Mongo     = require('mongodb'),
+    //Mongo     = require('mongodb'),
     dbConnect = require('../../app/lib/mongodb'),
     cp        = require('child_process'),
     db        = 'treasure-map-test';
@@ -25,13 +25,25 @@ describe('Treasure', function(){
 
   describe('constructor', function(){
     it('should create a new Treasure object', function(){
-      var t = new Treasure({'name':'gold', 'loc':{'name':'Mexico', 'lat':'90', 'lng':'-90'}, 'diff':'1', 'order':'2', 'photos':{}, 'hints':{'1':'do this', '2':'then that', '3':'then this again'}, 'tags':'tag1, tag2'});
+      var t = new Treasure({'name':['gold'], 'loc':['Mexico', '90', '-90.35'], 'diff':['1'], 'order':['2'], 'photos':['img1', 'img2'], 'hints':['do this', 'then that', 'then this again'], 'tags':['tag1, tag2']});
       expect(t).to.be.instanceof(Treasure);
+      expect(t.name).to.equal('gold');
+      expect(t.loc.name).to.equal('Mexico');
+      expect(t.loc.lat).to.equal(90);
+      expect(t.loc.lng).to.equal(-90.35);
+      //add further tests
     });
   });
 
   describe('.create', function(){
     it('should create and save a new Treasure object', function(){
+      //var o = {'name':['gold'], 'loc':['Mexico', '90', '-90.35'], 'diff':['1'], 'order':['2'], 'photos':['img1', 'img2'], 'hints':['do this', 'then that', 'then this again'], 'tags':['tag1, tag2']};
+      //Treasure.create(o, {photos:[]}, function(){
+        //Treasure.findById(o._id, function(err, t){
+          //expect(t).to.be.instanceof(Treasure);
+          //expect(t._id).to.be.instanceof(Mongo.ObjectID);
+        //});
+      //});
     });
   });
 
@@ -66,4 +78,3 @@ describe('Treasure', function(){
     });
   });
 });
-

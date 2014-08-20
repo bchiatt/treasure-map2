@@ -1,15 +1,17 @@
 'use strict';
 
-var Mongo = require('mongodb');
+var Mongo = require('mongodb'),
+    fs    = require('fs'),
+    path  = require('path');
 
 function Treasure(o){
-  this.name = o.name;
-  this.loc = o.loc;
-  this.diff = o.diff * 1;
-  this.order = o.order * 1;
-  this.hints = makeArray(o.hints);
+  this.name = o.name[0];
+  this.loc = {name: o.loc[0], lat: parseFloat(o.loc[1]), lng: parseFloat(o.loc[2] * 1)};
+  this.diff = o.diff[0] * 1;
+  this.order = o.order[0] * 1;
+  this.hints = o.hints;
   this.photos = [];
-  this.tags = o.tags.split(',').map(function(t){return t.trim();});
+  this.tags = o.tags[0].split(',').map(function(t){return t.trim();});
   this.isFound = false;
 }
 
@@ -17,7 +19,12 @@ Object.defineProperty(Treasure, 'collection', {
   get: function(){return global.mongodb.collection('treasures');}
 });
 
-Treasure.create = function(){};
+Treasure.create = function(fields, files, cb){
+  var t = new Treasure(fields);
+  Treasure.collection.save(t, function(){
+    t.uploadPhoto(files, cb);
+  });
+};
 
 Treasure.query = function(query, sort, cb){
   Treasure.collection.find(query, sort).toArray(cb);
@@ -35,15 +42,26 @@ Treasure.findById = function(id, cb){
 
 //private helper functions
 
-function makeArray(o){
-  var keys = Object.keys(o),
-      array = [];
+Treasure.prototype.uploadPhoto = function(files, cb){
+  var dir    = __dirname + '/../static/img/' + this._id,
+      exist  = fs.existsSync(dir),
+      self   = this;
 
-  for(var i = 1; i <= keys.length; i++){
-    array.push(o[i]);
+  if(!exist){
+    fs.mkdirSync(dir);
   }
 
-  return array;
-}
+  files.photos.forEach(function(photo){
+    var ext    = path.extname(photo.path),
+        rel    = '/img/' + self._id + '/' + self.photos.length + ext,
+        abs    = dir + '/' + self.photos.length + ext;
+    fs.renameSync(photo.path, abs);
+
+    self.photos.push(rel);
+  });
+
+  Treasure.collection.update(self, cb);
+
+};
 
 module.exports = Treasure;
