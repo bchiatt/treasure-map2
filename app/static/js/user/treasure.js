@@ -7,11 +7,11 @@
       directionsDisplay;
 
   $(document).ready(function(){
+    var positions = getPositions(),
+        locations = getLocations();
     directionsDisplay = new google.maps.DirectionsRenderer();
     initMap(39.8282, -98.5795, 3);
     directionsDisplay.setMap(map);
-    var positions = getPositions(),
-        locations = getLocations();
     positions.forEach(function(pos){
       addMarker(pos.lat, pos.lng, pos.name);
     });
@@ -84,7 +84,6 @@
           pos  = {name:name, lat:parseFloat(lat), lng:parseFloat(lng)};
       return(pos);
     });
-
     return positions;
   }
 

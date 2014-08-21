@@ -19,11 +19,11 @@ block content
         tbody
           each treasure in treasures
             tr(data-name='#{treasure.loc.name}', data-lat='#{treasure.loc.lat}', data-lng='#{treasure.loc.lng}', data-order='#{treasure.order}')
-            -if (treasure.isActive){
+              -if (treasure.isActive){
               td: a(href='/treasures/#{treasure._id}')=treasure.name
-            -}else{
-              td=treasure.name
-            -}
+              -}else{
+              td ??????
+              -}
               td=treasure.loc.name
               td!= makeLink.diff(treasure.diff)
               td!= makeLink.tags(query, treasure.tags)
