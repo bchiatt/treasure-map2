@@ -5,12 +5,16 @@ block content
       .col-xs-5
         .row
           .header: h1=treasure.loc.name
-        .row
-          #map-small
       .col-xs-7
         .row
           .col-xs-12
             .header: h1(style='text-align:right')=treasure.name
+  .row
+    .col-xs-12
+      .col-xs-5
+        .row
+          #map-small
+      .col-xs-7
         .row
           .col-xs-12
             #carousel-example-generic(class='carousel slide', data-ride='carousel')
@@ -48,8 +52,11 @@ block content
         each hint, index in treasure.hints
           li: h4 #{index+1}. #{hint}
     .col-xs-7
-      form(method='post', action='/treasures/#{treasure._id}/found')
-        button#found.btn.btn-danger(type='submit') FOUND
+      form(method='post', action='/treasures/#{treasure._id}/#{treasure.order}/found')
+        -if (!treasure.isFound)
+          button#found.btn.btn-danger(type='submit') FOUND
+        -else
+          button#found.btn.btn-danger(type='submit' disabled='disabled') FOUND
 
 block scripts
   script(src='/js/user/show-treasure.js')

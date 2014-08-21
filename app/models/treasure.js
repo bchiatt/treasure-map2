@@ -31,10 +31,11 @@ Treasure.query = function(query, sort, cb){
   Treasure.collection.find(query, sort).toArray(cb);
 };
 
-Treasure.found = function(id, order, cb){
-  var _id = Mongo.ObjectID(id);
+Treasure.found = function(o, cb){
+  var order = (o.order * 1) + 1,
+      _id = Mongo.ObjectID(o.id);
   Treasure.collection.update({_id:_id}, {$set:{isFound:true}}, function(){
-    Treasure.collection.update({order:(order + 1)}, {$set:{isActive:true}}, cb);
+    Treasure.collection.update({order:order}, {$set:{isActive:true}}, cb);
   });
 };
 

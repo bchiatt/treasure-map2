@@ -2,16 +2,20 @@
 
 var Treasure = require('../models/treasure'),
     mp       = require('multiparty'),
-    lodash   = require('lodash');
+    lodash   = require('lodash'),
+    makeLink = require('../helpers/make-link');
 
 exports.index = function(req, res){
   Treasure.query({}, {}, function(err, treasures){
-    res.render('treasures/index', {treasures:treasures, lodash:lodash});
+    res.render('treasures/index', {treasures:treasures, lodash:lodash, makeLink:makeLink});
   });
 };
 
 exports.init = function(req, res){
-  res.render('treasures/init');
+  Treasure.collection.count(function(err, count){
+    var order = ++count;
+    res.render('treasures/init', {order:order});
+  });
 };
 
 exports.create = function(req, res){
@@ -30,5 +34,7 @@ exports.show = function(req, res){
 };
 
 exports.done = function(req, res){
-  res.redirect('/treasures');
+  Treasure.found(req.params, function(){
+    res.redirect('/treasures');
+  });
 };
