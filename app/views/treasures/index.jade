@@ -10,12 +10,12 @@ block content
       table.table.table-hover
         thead
           tr
-            th Name
-            th Location
-            th Difficulty
-            th Tags
-            th Order
-            th Found
+            th!= makeLink.sort(query, 'name', 'Treasure')
+            th!= makeLink.sort(query, 'loc.name', 'Location')
+            th!= makeLink.sort(query, 'diff', 'Difficulty')
+            th: a(href='/treasures') Tags
+            th!= makeLink.sort(query, 'order', 'Order')
+            th!= makeLink.sort(query, 'isFound', 'Found?')
         tbody
           each treasure in treasures
             tr(data-name='#{treasure.loc.name}', data-lat='#{treasure.loc.lat}', data-lng='#{treasure.loc.lng}', data-order='#{treasure.order}')
@@ -25,8 +25,8 @@ block content
               td=treasure.name
             -}
               td=treasure.loc.name
-              td=treasure.diff
-              td=treasure.tags
+              td!= makeLink.diff(treasure.diff)
+              td!= makeLink.tags(query, treasure.tags)
               td=treasure.order
               td=treasure.isFound
 

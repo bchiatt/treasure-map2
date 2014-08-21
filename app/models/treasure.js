@@ -5,15 +5,18 @@ var Mongo = require('mongodb'),
     path  = require('path');
 
 function Treasure(o){
-  this.name = o.name[0];
-  this.loc = {name: o.loc[0], lat: parseFloat(o.loc[1]), lng: parseFloat(o.loc[2] * 1)};
-  this.diff = o.diff[0] * 1;
-  this.order = o.order[0] * 1;
-  this.hints = o.hints;
-  this.photos = [];
-  this.tags = o.tags[0].split(',').map(function(t){return t.trim();});
+  this.name     = o.name[0];
+  this.loc      = {};
+  this.loc.name = o.loc[0];
+  this.loc.lat  = parseFloat(o.loc[1]);
+  this.loc.lng  = parseFloat(o.loc[1]);
+  this.diff     = o.diff[0] * 1;
+  this.order    = o.order[0] * 1;
+  this.hints    = o.hints;
+  this.photos   = [];
+  this.tags     = o.tags[0].split(',').map(function(t){return t.trim();});
   this.isActive = (o.order[0] === '1') ? true : false;
-  this.isFound = false;
+  this.isFound  = false;
 }
 
 Object.defineProperty(Treasure, 'collection', {
@@ -27,8 +30,14 @@ Treasure.create = function(fields, files, cb){
   });
 };
 
-Treasure.query = function(query, sort, cb){
-  Treasure.collection.find(query, sort).toArray(cb);
+Treasure.query = function(query, cb){
+  var filter = {},
+      sort   = {};
+
+  if(query.tag){filter = {tags:{$in:[query.tag]}};}
+  if(query.sort){sort[query.sort] = query.order * 1;}
+
+  Treasure.collection.find(filter).sort(sort).toArray(cb);
 };
 
 Treasure.found = function(o, cb){

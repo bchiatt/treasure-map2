@@ -2,12 +2,11 @@
 
 var Treasure = require('../models/treasure'),
     mp       = require('multiparty'),
-    lodash   = require('lodash'),
     makeLink = require('../helpers/make-link');
 
 exports.index = function(req, res){
-  Treasure.query({}, {}, function(err, treasures){
-    res.render('treasures/index', {treasures:treasures, lodash:lodash, makeLink:makeLink});
+  Treasure.query(req.query, function(err, treasures){
+    res.render('treasures/index', {treasures:treasures, query:req.query,  makeLink:makeLink});
   });
 };
 
