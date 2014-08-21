@@ -12,6 +12,7 @@ function Treasure(o){
   this.hints = o.hints;
   this.photos = [];
   this.tags = o.tags[0].split(',').map(function(t){return t.trim();});
+  this.isActive = (o.order[0] === '1') ? true : false;
   this.isFound = false;
 }
 
@@ -30,9 +31,11 @@ Treasure.query = function(query, sort, cb){
   Treasure.collection.find(query, sort).toArray(cb);
 };
 
-Treasure.found = function(id, cb){
+Treasure.found = function(id, order, cb){
   var _id = Mongo.ObjectID(id);
-  Treasure.collection.update({_id:_id}, {$set:{isFound:true}}, cb);
+  Treasure.collection.update({_id:_id}, {$set:{isFound:true}}, function(){
+    Treasure.collection.update({order:(order + 1)}, {$set:{isActive:true}}, cb);
+  });
 };
 
 Treasure.findById = function(id, cb){
@@ -60,7 +63,7 @@ Treasure.prototype.uploadPhoto = function(files, cb){
     self.photos.push(rel);
   });
 
-  Treasure.collection.update({id:self._id}, {$set:{photos:self.photos}}, cb);
+  Treasure.collection.save(self, cb);
 
 };
 

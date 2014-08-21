@@ -1,18 +1,56 @@
 extends ../shared/template
 block content
-  h2 Home
-  .panel.panel-default
-    .panel-body
-      h4 Bootstrap Themes and Templates
-      ul
-        li: a(href='http://bootswatch.com/', target='_blank') http://bootswatch.com/
-        li: a(href='http://bootstrapzero.com/', target='_blank') http://bootstrapzero.com/
-        li: a(href='http://startbootstrap.com/', target='_blank') http://startbootstrap.com/
-        li: a(href='http://www.prepbootstrap.com/', target='_blank') http://www.prepbootstrap.com/
-        li: a(href='http://www.blacktie.co/', target='_blank') http://www.blacktie.co/
-        li: a(href='https://bootstrapmaster.com/', target='_blank') https://bootstrapmaster.com/
-        li: a(href='http://bootstrapstyler.com/', target='_blank') http://bootstrapstyler.com/
+  .row
+    .col-xs-12
+      .col-xs-5
+        .row
+          .header: h1=treasure.loc.name
+        .row
+          #map-small
+      .col-xs-7
+        .row
+          .col-xs-12
+            .header: h1(style='text-align:right')=treasure.name
+        .row
+          .col-xs-12
+            #carousel-example-generic(class='carousel slide', data-ride='carousel')
+              ol.carousel-indicators
+                - for (var i = 0; i < treasure.photos.length; i ++){
+                  li(data-target='#carousel-example-generic', data-slide-to=i)
+                - }
+              .carousel-inner
+                each photo, index in treasure.photos
+                  div(class=index === 0 ? 'item active' : 'item')
+                    .photo-treasure(style='background-image: url(#{photo})')
+              a(class='left carousel-control', href='#carousel-example-generic', role='button', data-slide='prev')
+                span(class='glyphicon glyphicon-chevron-left')
+              a(class='right carousel-control', href='#carousel-example-generic', role='button', data-slide='next')
+                span(class='glyphicon glyphicon-chevron-right')
+        .row
+          .col-xs-12
+            table.table
+              thead
+                tr
+                  th Lattitude
+                  th Longitude
+                  th Difficulty
+                  th Order
+              tbody
+                tr#treasure(data-name='#{treasure.loc.name}', data-lat='#{treasure.loc.lat}', data-lng='#{treasure.loc.lng}')
+                  td=parseFloat(treasure.loc.lat).toFixed(4)
+                  td=parseFloat(treasure.loc.lng).toFixed(4)
+                  td=treasure.diff
+                  td=treasure.order
+  .row
+    .col-xs-5
+      h2 Hints
+      ul#list-hints.list-inline
+        each hint, index in treasure.hints
+          li: h4 #{index+1}. #{hint}
+    .col-xs-7
+      form(method='post', action='/treasures/#{treasure._id}/found')
+        button#found.btn.btn-danger(type='submit') FOUND
 
 block scripts
-  script(src='/js/user/show-treasures.js')
+  script(src='/js/user/show-treasure.js')
 

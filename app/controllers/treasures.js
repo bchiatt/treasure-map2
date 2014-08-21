@@ -1,11 +1,13 @@
 'use strict';
 
 var Treasure = require('../models/treasure'),
-    moment   = require('moment'),
-    mp       = require('multiparty');
+    mp       = require('multiparty'),
+    lodash   = require('lodash');
 
 exports.index = function(req, res){
-  res.render('treasures/index', {moment:moment});
+  Treasure.query({}, {}, function(err, treasures){
+    res.render('treasures/index', {treasures:treasures, lodash:lodash});
+  });
 };
 
 exports.init = function(req, res){
@@ -22,14 +24,11 @@ exports.create = function(req, res){
 };
 
 exports.show = function(req, res){
-  res.render('treasures/show');
+  Treasure.findById(req.params.id, function(err, treasure){
+    res.render('treasures/show', {treasure:treasure});
+  });
 };
 
 exports.done = function(req, res){
   res.redirect('/treasures');
 };
-
-exports.index = function(req, res){
-  res.render('treasures/index');
-};
-

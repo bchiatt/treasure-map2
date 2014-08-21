@@ -1,21 +1,79 @@
-/* global google:true */
+/* global google:true, _:true */
 
 (function(){
   'use strict';
 
-  var map;
+  var map,
+      directionsDisplay;
 
   $(document).ready(function(){
-    initMap(0, 0, 2);
-    var positions = getPositions();
+    directionsDisplay = new google.maps.DirectionsRenderer();
+    initMap(39.8282, -98.5795, 3);
+    directionsDisplay.setMap(map);
+    var positions = getPositions(),
+        locations = getLocations();
     positions.forEach(function(pos){
       addMarker(pos.lat, pos.lng, pos.name);
     });
+    calcRoute(locations);
   });
+
+  function calcRoute(locs){
+    var directionsService = new google.maps.DirectionsService(),
+        start             = _.min(locs, 'order'),
+        end               = _.max(locs, 'order'),
+        waypts            = _.cloneDeep(locs);
+
+    _.remove(waypts, function(point){
+      return point.order === start.order;
+    });
+
+    _.remove(waypts, function(point){
+      return point.order === end.order;
+    });
+
+    waypts.sort(function(a, b){
+      return a.order - b.order;
+    });
+
+    waypts = waypts.map(function(p){
+      return {location:p.name, stopover:true};
+    });
+
+    var request = {
+      origin: start.name,
+      destination: end.name,
+      waypoints: waypts,
+      optimizeWaypoints: false,
+      travelMode: google.maps.TravelMode.DRIVING
+    };
+
+    directionsService.route(request, function(response, status){
+      if (status === google.maps.DirectionsStatus.OK){
+        directionsDisplay.setDirections(response);
+      }
+    });
+  }
+
+  function getLocations(){
+    var locations = $('table tbody tr').toArray().map(function(o){
+      var loc = {};
+      loc.name = $(o).attr('data-name');
+      loc.lat = parseFloat($(o).attr('data-lat'));
+      loc.lng = parseFloat($(o).attr('data-lng'));
+      loc.order = parseInt($(o).attr('data-order'));
+
+      return loc;
+    });
+
+    return locations;
+
+  }
+
 
   function addMarker(lat, lng, name){
     var latLng = new google.maps.LatLng(lat, lng);
-    new google.maps.Marker({map: map, position: latLng, title: name, animation: google.maps.Animation.DROP, icon: '/img/map-flag.png'});
+    new google.maps.Marker({map: map, position: latLng, title: name, animation: google.maps.Animation.DROP});
   }
 
   function getPositions(){
