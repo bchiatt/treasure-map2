@@ -49,7 +49,7 @@ describe('Treasure', function(){
 
   describe('.query', function(){
     it('should get all treasures', function(done){
-      Treasure.query({}, {}, function(err, treasures){
+      Treasure.query({}, function(err, treasures){
         expect(treasures).to.have.length(3);
         done();
       });
@@ -68,8 +68,9 @@ describe('Treasure', function(){
 
   describe('.found', function(){
     it('should get change treasure to found', function(done){
-      var id = '000000000000000000000002';
-      Treasure.found(id, function(){
+      var id    = '000000000000000000000002',
+          order = '2';
+      Treasure.found({id:id, order:order}, function(){
         Treasure.findById(id, function(err, treasure){
           expect(treasure.isFound).to.be.true;
           done();

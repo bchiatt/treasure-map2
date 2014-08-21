@@ -9,7 +9,7 @@ function Treasure(o){
   this.loc      = {};
   this.loc.name = o.loc[0];
   this.loc.lat  = parseFloat(o.loc[1]);
-  this.loc.lng  = parseFloat(o.loc[1]);
+  this.loc.lng  = parseFloat(o.loc[2]);
   this.diff     = o.diff[0] * 1;
   this.order    = o.order[0] * 1;
   this.hints    = o.hints;
